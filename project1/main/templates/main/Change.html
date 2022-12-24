@@ -1,0 +1,57 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+
+{% block content %}
+<div style="display: block; width: 30%; margin-left: 30px; padding-top: 160px;">
+    <form action="Change" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <input type="hidden" name="oldName" value="{{ product.name }}">
+        <div class="form-outline">
+            <input type="text" id="firstName" name="name" value="{{ product.name }}" class="form-control form-control-lg" required/>
+            <label class="form-label" for="firstName" style="font-weight: bold; color: rgb(194, 44, 161);">Product name</label>
+        </div>
+
+        <div class="form-outline">
+            <img src="{{ product.img }}" width="100" height="80">
+            <input type="text" id="firstName" name="img" value="{{ product.img }}" class="form-control form-control-lg" style="margin-top: 30px;"/>
+            <label class="form-label" for="firstName" style="font-weight: bold; color: rgb(194, 44, 161);">Product image src</label>
+        </div>
+
+        <select class="form-select" aria-label="Default select example" name="category" style="font-weight: bold;" required>
+            {% for category in categoryes %}
+                {% if category != product.category %}
+                    <option value="{{ category }}">{{category}}</option>
+                {% else %}
+                    <option value="{{ category }}" selected>{{category}}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+
+        <div style="overflow-x:scroll; white-space: nowrap; width: 700px; margin-top: 10px;" class="col-md-12">
+            <span ng-repeat="item in images" >
+                {%for screen in product.screens %}
+                <a ng-href="{{screen}}" target="_blank">
+                    <img width="700" height="500" src="{{screen}}">
+                </a>
+                {% endfor %}
+            </span>
+        </div>
+
+        {%for screen in product.screens %}
+            <input type="hidden" name="OldScreens" value="{{screen}}">
+        {% endfor %}
+        
+        <div class="form-outline">
+            <input type="file" name="screens" multiple style="margin-top: 30px; color: rgb(194, 44, 161);"/>
+        </div>
+
+        <div class="form-outline" style="margin-top: 10px;">
+            <input type="number" min="1" name="price" value="{{ product.price }}" class="form-control form-control-lg" step="0.01" required/>
+            <label class="form-label" for="firstName" style="font-weight: bold; color: rgb(194, 44, 161);">Price</label>
+        </div>
+
+        <button class="btn btn-outline-success" type="submit" style="background-color: green; color: white;">Change</button>
+    </form>
+</div>
+{% endblock %}
